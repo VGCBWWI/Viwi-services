@@ -1,0 +1,2037 @@
+{
+  "name": "radio",
+  "description": "Radio Service to for braodcast and web radio functionalitys. For NAR market a sdars service will extent the radio functionality",
+  "resources": {
+    "audiosegments": {
+      "description": "This endpoint contains audiosegments for playblack.\nWebRadio Episodes will be part of audiosegements.\nSDARS: a sportsFlash, TWN Report is a audio segement",
+      "model": {
+        "name": "audiosegmentObject",
+        "resource": "radio.audiosegments",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "airTime": {
+            "description": "UTC timestamp of the actual air time\n\nis JSON undefine if the information is unavailable",
+            "format": "date-time",
+            "type": "string"
+          },
+          "contextualInfo": {
+            "description": "contextual text for the content (trending, new, etc…)",
+            "type": "string"
+          },
+          "duration": {
+            "description": "song duration, \nproperty is undefine if a station has an unlimited audioSegement\n\nis JSON undefine if the information is unavailable",
+            "minimum": 0,
+            "resolution": 1000,
+            "type": "integer",
+            "unit": "ms"
+          },
+          "gameEvent": {
+            "description": "reference to game event object if current content is a sports event.",
+            "oneOf": [
+              {
+                "#ref": "sdars.sportsEvents.sportsEventObject"
+              }
+            ],
+            "type": "object"
+          },
+          "isBuffered": {
+            "description": "indicate if a audioSegement is bufferd and has and defined limit. [SDARS ONLY]\n\nis JSON undefine if the information is unavailable",
+            "type": "boolean"
+          },
+          "lastListened": {
+            "description": "UTC timestamp when the content was last listened to",
+            "format": "date-time",
+            "type": "string"
+          },
+          "showName": {
+            "description": "provides the shown name for the Song/episode \n\nJSON undefine if the information can't supported",
+            "type": "string"
+          },
+          "songAlbum": {
+            "description": "album name of the song contained in this audiosegment",
+            "type": "string"
+          },
+          "songArtist": {
+            "description": "song artist(s)",
+            "type": "string"
+          },
+          "songCategory": {
+            "description": "song category/genre string array\n\nis JSON undefine if the information is unavailable",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "songDate": {
+            "description": "song release date\n\nis JSON undefine if the information is unavailable",
+            "format": "date",
+            "type": "string"
+          },
+          "songImage": {
+            "description": "cover art of (current) song",
+            "format": "uri",
+            "type": "string"
+          },
+          "songTitle": {
+            "description": "title of the song contained in this audiosegment",
+            "type": "string"
+          },
+          "sportsEventDetails": {
+            "description": "Provide the SXM sport game details such as Quarter or Inning\n\nJSON undefine if not supported/available",
+            "type": "string"
+          },
+          "sportsEventName": {
+            "description": "name of the broadcasted sports event",
+            "type": "string"
+          },
+          "sportsTeamHome": {
+            "description": "reference to the home sports team that is broadcasted",
+            "oneOf": [
+              {
+                "#ref": "sdars.sportsTeams.sportsTeamObject"
+              }
+            ],
+            "type": "object"
+          },
+          "sportsTeamScoreHome": {
+            "description": "SXM home team score\n\nJSON undefine if not supported/available",
+            "maximum": 999,
+            "minimum": 0,
+            "resolution": 1,
+            "type": "integer"
+          },
+          "sportsTeamScoreVisitor": {
+            "description": "SXM visitor team score\n\nJSON undefine if not supported/available",
+            "maximum": 999,
+            "minimum": 0,
+            "resolution": 1,
+            "type": "integer"
+          },
+          "sportsTeamVisitor": {
+            "description": "SXM reference to the visitor sports team that is broadcasted\nJSON undefine if not supported/available",
+            "oneOf": [
+              {
+                "#ref": "sdars.sportsTeams.sportsTeamObject"
+              }
+            ],
+            "type": "object"
+          },
+          "station": {
+            "description": "the station that created this segment (set to JSON-undefined if not applicable)",
+            "oneOf": [
+              {
+                "#ref": "radio.stations.stationObject"
+              }
+            ],
+            "type": "object"
+          },
+          "sxmArtistFavorite": {
+            "description": "Reference to a favoriteArtistTitleObject, if the currently playing artist is an SXM favorite.  Undefined if the currently playing artist is not an SXM favorite, or if not relevant for the current active source (for example, FM)",
+            "oneOf": [
+              {
+                "#ref": "sdars.favoriteArtistTitle.favoriteArtistTitleObject"
+              }
+            ],
+            "type": "object"
+          },
+          "sxmTitleFavorite": {
+            "description": "Reference to a favoriteArtistTitleObject, if the currently playing title is an SXM favorite.  Undefined if the currently playing artist is not an SXM favorite, or if not relevant for the current active source  (for example, FM)",
+            "oneOf": [
+              {
+                "#ref": "sdars.favoriteArtistTitle.favoriteArtistTitleObject"
+              }
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {}
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "The server shall support filtering of GET requests for all combinations of properties listed in the following plus id, name, uri.",
+              "method": "get",
+              "properties": {
+                "airTime": {
+                  "description": "see model description",
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "duration": {
+                  "description": "see model description",
+                  "minimum": 0,
+                  "resolution": 1000,
+                  "type": "integer",
+                  "unit": "ms"
+                },
+                "gameEvent": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "isBuffered": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "lastListened": {
+                  "description": "see model description",
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "songAlbum": {
+                  "description": "see data model",
+                  "type": "string"
+                },
+                "songArtist": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "songCategory": {
+                  "description": "see model description",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "songDate": {
+                  "description": "see model description",
+                  "format": "date",
+                  "type": "string"
+                },
+                "songImage": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "songTitle": {
+                  "description": "see data model",
+                  "type": "string"
+                },
+                "station": {
+                  "description": "see data model",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "sxmArtistFavorite": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "sxmTitleFavorite": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.audiosegments"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "bands": {
+      "description": "Radio bands host typical bands in car radios and virtual bands that combine bands e.g. USL.  This resource provides available bands.",
+      "model": {
+        "name": "bandObject",
+        "resource": "radio.bands",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of band, consider!",
+            "enum": [
+              "am",
+              "dab",
+              "fm",
+              "sat",
+              "web",
+              "USL"
+            ],
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "alternativeFrequency": {
+            "description": "follow alternative frequencies for stations on this band. Set to JSON-undefined if 'AF' feature is technically not possible on this band.",
+            "type": "boolean"
+          },
+          "ibocFunction": {
+            "description": "switch iboc on/off for HD Radio and DRM.\n\nis JSON undefine for irrelevant bands.",
+            "type": "boolean"
+          },
+          "otherAnnouncements": {
+            "description": "Switch to control the other announcements available in DAB band only. \nDAB announcement contains the following DAB announcement types: \nAlarm (if not treated as own category), Warning, News, Weather, Event, Special event, Program Info, Sport report, Financial Report. \nSet the property value to ‘True’ to turn other announcements ON  (Default) and ‘False’ to turn OFF. Set the property value to JSON-undefined in band elements for which this property is irrelevant.",
+            "type": "boolean"
+          },
+          "phonetics": {
+            "description": "Array of references to phonetic data for voice control (SDS) of this band.",
+            "oneOf": [
+              {
+                "#ref": "phonemecontentnetwork.phonemes.phonemeObject"
+              }
+            ],
+            "type": "object"
+          },
+          "radioDataSystem": {
+            "description": "\"switch RDS on/off in FM band. Set the property value to ‘True’ to turn Radio Data System ON and ‘False’ to turn OFF . Set the property value to JSON-undefined in band elements for which this property is irrelevant.",
+            "type": "boolean"
+          },
+          "ranges": {
+            "description": "list of continous HF ranges belonging to this band. Number of array members depends on geographical region.",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.ranges.rangeObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "regionsModeSelection": {
+            "description": "switch that allows the selection of a region depending upon the  car position or manual selection by the user. Default (Automatic). This property is helpful to load station logos from database and the bands that provide station logos\", change the property value as per the user selection in all relevant bands and JSON-undefined for bands for which do not provide any station logos.",
+            "enum": [
+              "automatic",
+              "manual"
+            ],
+            "type": "string"
+          },
+          "serviceLinking": {
+            "description": "defines the allowed linking possibilities within and between radio bands",
+            "type": "boolean"
+          },
+          "trafficProgramme": {
+            "description": "A band may contain stations or programmes broadcasting traffic information. 'true': reception of traffic programmes is ON, 'false' - reception of traffic programmes is OFF. Set to JSON-undefined if traffic programmes are not broadcast on this band.",
+            "type": "boolean"
+          },
+          "virtualBandFlag": {
+            "description": "a flag that indicate that the band is a mix of multiple physical bands",
+            "type": "boolean"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "",
+              "method": "post",
+              "properties": {
+                "alternativeFrequency": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "ibocFunction": {
+                  "description": "see data model",
+                  "type": "boolean"
+                },
+                "otherAnnouncements": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "radioDataSystem": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "regionsModeSelection": {
+                  "description": "see model description",
+                  "enum": [
+                    "automatic",
+                    "manual"
+                  ],
+                  "type": "string"
+                },
+                "serviceLinking": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "trafficProgramme": {
+                  "description": "see model description",
+                  "type": "boolean"
+                }
+              },
+              "resource": "radio.bands"
+            }
+          }
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "The server shall support filtering of GET requests for all combinations of properties listed in the following plus id, name, uri.",
+              "method": "get",
+              "properties": {},
+              "resource": "radio.bands"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "categories": {
+      "description": "This endpoint provides categories. They may be donwloaded/defined during runtime (in case of SDARS) or be defined at design time (e.g. in case of DAB, RDS, RDBS).",
+      "model": {
+        "name": "categoryObject",
+        "resource": "radio.categories",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "shall be set to the shortest available name of a category",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "bands": {
+            "description": "reference to bands element to support band specific categories",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.bands.bandObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "categoryBackgroundImageLandscape": {
+            "description": "SXM category background image in landscape format",
+            "format": "uri",
+            "type": "string"
+          },
+          "categoryBackgroundImagePortrait": {
+            "description": "SXM category image in portait format",
+            "format": "uri",
+            "type": "string"
+          },
+          "categoryPhonetic": {
+            "description": "provide an array of phonetics",
+            "oneOf": [
+              {
+                "#ref": "phonemecontentnetwork.phonemes.phonemeObject"
+              }
+            ],
+            "type": "object"
+          },
+          "categoryType": {
+            "description": "@Deprecated: No longer used\ntype of category",
+            "type": "string"
+          },
+          "imageOverDark": {
+            "description": "image of the category over dark background if avaialble otherwise JSON Undefine\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "imageOverLight": {
+            "description": "image of the category over light background, if avaialble otherwise JSON Undefine\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "imagePreferred": {
+            "description": "preferred image of the category; \ncan be set by the user (optionally)\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "nameLong": {
+            "description": "category long name",
+            "type": "string"
+          },
+          "nameMedium": {
+            "description": "category medium long name (10 Characters)",
+            "type": "string"
+          },
+          "nameShort": {
+            "description": "category short name (8 characters)",
+            "type": "string"
+          },
+          "subCategories": {
+            "description": "Member categorys of a major category.",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.categories.categoryObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "superCategory": {
+            "description": "Flag indicating that this category is a supercategory",
+            "type": "boolean"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {}
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "see model description",
+              "method": "get",
+              "properties": {
+                "bands": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "categoryPhonetic": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "imageOverDark": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "imageOverLight": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "nameLong": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "nameShort": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "subCategories": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "superCategory": {
+                  "description": "see model description",
+                  "type": "boolean"
+                }
+              },
+              "resource": "radio.categories"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "collections": {
+      "description": "radio collections host playable items such as audio segments or stations. collections can be used to represent certain features as well, like SXM tuneMixes, sportsFlash, trafficWheatherNow, title and artist seeks or tuneScans. The previous/next functionality is expressed by the length of the items property. If the player, using the collection, points to an item in the items list that has:  a) a left neighbor, `previous` action is possible to be fullfilled by moving the pointer to the neighbor b) a right neighbor, `next` action is possible to be fullfilled by moving the pointer to the neighbor. The existence of a collection with a certain name expresses a features availability (e.g. a SXMTuneScan collection exists, so the featur SXM tuneScan is generally available.).",
+      "model": {
+        "name": "collectionObject",
+        "resource": "radio.collections",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "filterChannelNumber": {
+            "description": "filter the elements of the collection to an SDARS channelNumber",
+            "maximum": 999,
+            "minimum": 0,
+            "resolution": 1,
+            "type": "integer"
+          },
+          "filterFrequency": {
+            "description": "a frequency that user want to tune to",
+            "minimum": 0,
+            "type": "integer",
+            "unit": "kHz"
+          },
+          "filterProgram": {
+            "description": "A reference to a station or viritual station(TuneMix Object)",
+            "oneOf": [
+              {
+                "#ref": "radio.stations.stationObject"
+              },
+              {
+                "#ref": "sdars.tuneMixes.tuneMixObject"
+              },
+              {
+                "#ref": "sdars.sportsEvents.sportsEventObject"
+              }
+            ],
+            "type": "object"
+          },
+          "playableItems": {
+            "description": "collection of playable items. If a station don't support separated items, just one item shall created for.",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.audiosegments.audiosegmentObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {}
+        },
+        "resource": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "see model description",
+              "method": "post",
+              "properties": {
+                "filterChannelNumber": {
+                  "description": "see model description",
+                  "maximum": 999,
+                  "minimum": 0,
+                  "resolution": 1,
+                  "type": "integer"
+                },
+                "filterFrequency": {
+                  "description": "see model description",
+                  "minimum": 0,
+                  "type": "integer",
+                  "unit": "kHz"
+                },
+                "filterProgram": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.collections"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "listiterators": {
+      "description": "Iterator that provides the next, previous items of the referenced list and also parameter to set loopAround",
+      "model": {
+        "name": "listiteratorObject",
+        "resource": "radio.listiterators",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "shown name of the iterator",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "loopAround": {
+            "description": "a switch that allowed to loop the list.\nTrue = loop allowed\nfalse = loop is not allowed",
+            "type": "boolean"
+          },
+          "nextItem": {
+            "description": "next element in the list related to current item, empty , if the element does not exist",
+            "oneOf": [
+              {
+                "#ref": "radio.audiosegments.audiosegmentObject"
+              },
+              {
+                "#ref": "radio.stations.stationObject"
+              },
+              {
+                "#ref": "radio.presets.presetObject"
+              }
+            ],
+            "type": "object"
+          },
+          "prevItem": {
+            "description": "prev element in the list related to current item,\nempty , if the element does not exist",
+            "oneOf": [
+              {
+                "#ref": "radio.audiosegments.audiosegmentObject"
+              },
+              {
+                "#ref": "radio.stations.stationObject"
+              },
+              {
+                "#ref": "radio.presets.presetObject"
+              }
+            ],
+            "type": "object"
+          },
+          "referenceList": {
+            "description": "the refence of list that is running through e.g. StationList, PresetList, Collection, ...",
+            "format": "uri",
+            "type": "string"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "see model description",
+              "method": "post",
+              "properties": {
+                "loopAround": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "referenceList": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.listiterators"
+            }
+          }
+        },
+        "resource": {}
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "players": {
+      "description": "the replay manager of streaming radio content",
+      "model": {
+        "name": "playerObject",
+        "resource": "radio.players",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "autoStore": {
+            "description": "This property specifies the status of the autoStore function. Set the value to ‘true’ when autoStore is triggered and being executed; ‘false’ otherwise. Default status is false.",
+            "type": "boolean"
+          },
+          "band": {
+            "description": "current band, usuallay as set by the user",
+            "oneOf": [
+              {
+                "#ref": "radio.bands.bandObject"
+              }
+            ],
+            "type": "object"
+          },
+          "collection": {
+            "description": "the current radio collection",
+            "oneOf": [
+              {
+                "#ref": "radio.collections.collectionObject"
+              }
+            ],
+            "type": "object"
+          },
+          "currentItem": {
+            "description": "a item within the collection",
+            "oneOf": [
+              {
+                "#ref": "radio.audiosegments.audiosegmentObject"
+              }
+            ],
+            "type": "object"
+          },
+          "freq": {
+            "description": "current frequency",
+            "minimum": 0,
+            "type": "integer",
+            "unit": "kHz"
+          },
+          "isLiveContent": {
+            "description": "Wheather current content is at the live point or not",
+            "type": "boolean"
+          },
+          "offset": {
+            "description": "current play position in/on currentItem; set to JSON-undefined if content is not buffered",
+            "minimum": 0,
+            "resolution": 1000,
+            "type": "integer",
+            "unit": "ms"
+          },
+          "playFromStart": {
+            "description": "Controls for all smart favorite stations if every title shall be be played from its start. This setting affects stream buffering inside the sxm module.",
+            "type": "boolean"
+          },
+          "restartSegement": {
+            "description": "property used to start the current playing segment from the beginning.  Unavailable = restart is not possible for the current segment.  Available = restart is possible for the current segment and the possibility should be presented to the user.  Startover = user input to restart the current segment from the beginning",
+            "enum": [
+              "unavailable",
+              "available",
+              "startOver"
+            ],
+            "type": "string"
+          },
+          "scanActive": {
+            "description": "indication if the client scan is activated\nTrue = scanIsActive\n\nDefault = FALSE. \nJSON Undefine if the current active source does not support scan functions.",
+            "type": "boolean"
+          },
+          "seamlessLinkToOnline": {
+            "description": "indicate if a seamless link to Online is avaialble",
+            "enum": [
+              "idle",
+              "available",
+              "not available"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "description": "playback state, if a 'not buffered' station is tuned, then state is undefined.",
+            "enum": [
+              "idle",
+              "play",
+              "pause",
+              "seekFrequencyUp",
+              "seekFrequencyDown",
+              "loading"
+            ],
+            "type": "string"
+          },
+          "streamingServer": {
+            "description": "Contains the URI of an (internet) streaming service (audio signal).",
+            "format": "uri",
+            "type": "string"
+          },
+          "sxmSportsNotification": {
+            "description": "if SXM SportsFlash is not applicable the property is undefine. The notification will be given as an new object in sdars/sportsEvents",
+            "enum": [
+              "idle",
+              "get notification",
+              "cancel notification",
+              "playing SportEvent report",
+              "cancel playing SportEvent report"
+            ],
+            "type": "string"
+          },
+          "temporaryLinkedBand": {
+            "description": "temporary link to a band object to reflect a (temporary) band change due to quality reasons, e.g. link from DAB to FM. This indication might be used to indicate changes in the audio quality to be expected.",
+            "oneOf": [
+              {
+                "#ref": "radio.bands.bandObject"
+              }
+            ],
+            "type": "object"
+          },
+          "trafficProgramStatus": {
+            "description": "indicate about the TP availability for active source. \nJSON Undefine if TP does support.",
+            "enum": [
+              "TP",
+              "Unknown",
+              "No TP"
+            ],
+            "type": "string"
+          },
+          "tuneScan": {
+            "description": "to controll the SXM tune Scan feature",
+            "enum": [
+              "idle",
+              "startScan",
+              "stopScan",
+              "not applicable",
+              "applicable"
+            ],
+            "type": "string"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "The server shall support POST on element level for the following properties.",
+              "method": "post",
+              "properties": {
+                "band": {
+                  "description": "POST on this property to set the tuner to another frequency band.",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "collection": {
+                  "description": "POST on occlection to set the player to another collection.",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "currentItem": {
+                  "description": "POST on currentItem to set the player to another audiosegment within the collection being played. E.g. this can be used to implement functionality like 'next' or 'previous'.",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "freq": {
+                  "description": "see data model",
+                  "minimum": 0,
+                  "type": "integer",
+                  "unit": "kHz"
+                },
+                "isLiveContent": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "offset": {
+                  "description": "see data model",
+                  "minimum": 0,
+                  "resolution": 1000,
+                  "type": "integer",
+                  "unit": "ms"
+                },
+                "playFromStart": {
+                  "description": "see data model",
+                  "type": "boolean"
+                },
+                "restartSegement": {
+                  "description": "see model description",
+                  "enum": [
+                    "unavailable",
+                    "available",
+                    "startOver"
+                  ],
+                  "type": "string"
+                },
+                "state": {
+                  "description": "see data model",
+                  "enum": [
+                    "idle",
+                    "play",
+                    "pause",
+                    "seekFrequencyUp",
+                    "seekFrequencyDown",
+                    "loading"
+                  ],
+                  "type": "string"
+                },
+                "streamingServer": {
+                  "description": "see data model",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "sxmSportsNotification": {
+                  "description": "see model description",
+                  "enum": [
+                    "idle",
+                    "get notification",
+                    "cancel notification",
+                    "playing SportEvent report",
+                    "cancel playing SportEvent report"
+                  ],
+                  "type": "string"
+                },
+                "tuneScan": {
+                  "description": "see model description",
+                  "enum": [
+                    "idle",
+                    "startScan",
+                    "stopScan",
+                    "not applicable",
+                    "applicable"
+                  ],
+                  "type": "string"
+                }
+              },
+              "resource": "radio.players"
+            }
+          }
+        },
+        "resource": {
+          "get": {}
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "presets": {
+      "description": "A radio station preset allows to quickly access favorite stations. This endpoint provides access to the systems presets.",
+      "model": {
+        "name": "presetObject",
+        "resource": "radio.presets",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name of preset",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "position": {
+            "description": "preset position in the list, according to the PSO parameters",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "station": {
+            "description": "radio station or a SDARS TuneMix object (NAR only)",
+            "oneOf": [
+              {
+                "#ref": "radio.stations.stationObject"
+              },
+              {
+                "#ref": "sdars.tuneMixes.tuneMixObject"
+              }
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "",
+              "method": "post",
+              "properties": {
+                "name": {
+                  "description": "preset name",
+                  "type": "string"
+                },
+                "position": {
+                  "description": "preset position",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "station": {
+                  "description": "station to be added",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.presets"
+            }
+          },
+          "delete": {
+            "parameters": {
+              "description": "Use DELETE to pure a station from a preset or to delete a preset completely.",
+              "method": "delete",
+              "prohibitElementDeletion": false,
+              "properties": {
+                "station": {
+                  "description": "see data model",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.presets"
+            }
+          }
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "The server shall support filtering of GET requests for all combinations of properties listed in the following plus id, name, uri.",
+              "method": "get",
+              "properties": {
+                "position": {
+                  "description": "see data model",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "station": {
+                  "description": "see data model",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.presets"
+            }
+          },
+          "post": {
+            "parameters": {
+              "description": "",
+              "method": "post",
+              "properties": {
+                "name": {
+                  "description": "see data model description",
+                  "type": "string"
+                },
+                "position": {
+                  "description": "see data model description",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "station": {
+                  "description": "see data model description",
+                  "format": "uri",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "station",
+                "name",
+                "position"
+              ],
+              "resource": "radio.presets"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "ranges": {
+      "description": "This endpoint provides continous HF ranges supported by the tuner. These ranges belong to different bands. The linking between bands and HF ranges is defined in resource /radio/bands. Please note, a band may consist of several ranges, e.g. fragmented DAB band",
+      "model": {
+        "name": "rangeObject",
+        "resource": "radio.ranges",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "rangeMax": {
+            "description": "maximum range",
+            "minimum": 0,
+            "type": "integer",
+            "unit": "kHz"
+          },
+          "rangeMin": {
+            "description": "minimum range",
+            "minimum": 0,
+            "type": "integer",
+            "unit": "kHz"
+          },
+          "rangeStep": {
+            "description": "step size",
+            "minimum": 1,
+            "type": "integer",
+            "unit": "kHz"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {}
+        },
+        "resource": {
+          "get": {}
+        }
+      },
+      "systemTriggeredEvents": [
+        "element"
+      ]
+    },
+    "settings": {
+      "description": "setting parameters for the radio service",
+      "model": {
+        "name": "settingObject",
+        "resource": "radio.settings",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "shown name",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "isFactoryDefault": {
+            "description": "Set true if radio and SDARS settings are factory default. Set to false is settings have been changed by the user or any other service.\nIf a client post sets this back to true, a factory reset shall be performed.",
+            "type": "boolean"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "put": {}
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "see model description",
+              "method": "get",
+              "properties": {
+                "isFactoryDefault": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "name": {
+                  "description": "see model description",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.settings"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "stationLists": {
+      "description": "A station list for main display group",
+      "model": {
+        "name": "stationListObject",
+        "resource": "radio.stationLists",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "shown name of the stationList",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "bands": {
+            "description": "array of bands objects to configure/filter the mainStation list\n\nproperty can not adapted by indepanded stationList objects",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.bands.bandObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "listItems": {
+            "description": "items of the list",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.stations.stationObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "size": {
+            "description": "maximal number of stations in the list",
+            "maximum": 9999,
+            "minimum": 0,
+            "resolution": 1,
+            "type": "integer"
+          },
+          "stationListFilter": {
+            "description": "-deprecated: Filter split of into Bands, sxmStationSubscription \n- configure the station list content via combination of properties \nstring to generate a station list regarding element types and sorting",
+            "type": "string"
+          },
+          "stationListSorting": {
+            "description": "sorting of the station lists",
+            "enum": [
+              "group",
+              "alphabet",
+              "frequency",
+              "preferred category",
+              "channel Number",
+              "category",
+              "chronological",
+              "ranked"
+            ],
+            "type": "string"
+          },
+          "sxmStationSubscription": {
+            "description": "filter option for sxm channels.\ncombinations of enums possible\nProperty is JSON undefine for irrelevant bands",
+            "items": {
+              "enum": [
+                "Free to air",
+                "Subscribed",
+                "Unsubscribed",
+                "upgrade"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "see model description",
+              "method": "post",
+              "properties": {
+                "size": {
+                  "description": "see model description",
+                  "maximum": 9999,
+                  "minimum": 0,
+                  "resolution": 1,
+                  "type": "integer"
+                },
+                "stationListFilter": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "stationListSorting": {
+                  "description": "see model description",
+                  "enum": [
+                    "group",
+                    "alphabet",
+                    "frequency",
+                    "preferred category",
+                    "channel Number",
+                    "category",
+                    "chronological",
+                    "ranked"
+                  ],
+                  "type": "string"
+                }
+              },
+              "resource": "radio.stationLists"
+            }
+          }
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "see model description",
+              "method": "get",
+              "properties": {
+                "listItems": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "size": {
+                  "description": "see model description",
+                  "maximum": 9999,
+                  "minimum": 0,
+                  "resolution": 1,
+                  "type": "integer"
+                },
+                "stationListFilter": {
+                  "description": "see model description",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.stationLists"
+            }
+          },
+          "post": {
+            "parameters": {
+              "description": "see model description",
+              "method": "post",
+              "properties": {
+                "size": {
+                  "description": "see model description",
+                  "maximum": 9999,
+                  "minimum": 0,
+                  "resolution": 1,
+                  "type": "integer"
+                },
+                "stationListFilter": {
+                  "description": "see model description",
+                  "type": "string"
+                }
+              },
+              "resource": "radio.stationLists"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "resource",
+        "element"
+      ]
+    },
+    "stations": {
+      "description": "This endpoint provides available stations, regardless of the physical source.",
+      "model": {
+        "name": "stationObject",
+        "resource": "radio.stations",
+        "properties": {
+          "id": {
+            "description": "identifier",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "name of station (RDS PS, Podcast,DAB,SDARS short channel name with 8 chars).",
+            "type": "string"
+          },
+          "uri": {
+            "description": "object uri",
+            "format": "uri",
+            "type": "string"
+          },
+          "audioSegment": {
+            "description": "the corresponding live audio segment",
+            "oneOf": [
+              {
+                "#ref": "radio.audiosegments.audiosegmentObject"
+              }
+            ],
+            "type": "object"
+          },
+          "audioStatus": {
+            "description": "Information about digital decoding state of an IBOC station and digital based station. Property is defined, if this station is IBOC or web radio capabale. BallgameMode is HD Radio programs only\nonline = stream over IP",
+            "enum": [
+              "analogue",
+              "digital",
+              "muted",
+              "ballGameMode",
+              "online"
+            ],
+            "type": "string"
+          },
+          "bands": {
+            "description": "radio band",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.bands.bandObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "bufferProgress": {
+            "description": "current buffering progress is limited by maxBufferTime\n\nThe property is undefine for non buffering content.",
+            "minimum": 0,
+            "resolution": 1000,
+            "type": "integer",
+            "unit": "ms"
+          },
+          "category": {
+            "description": "The category/pty of a station or genres of podcast, defined by database or SDARS operator (sxm).",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.categories.categoryObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "channelNumber": {
+            "description": "channel number in case of SDARS reception\nThe Property undefine by no SDARS channel",
+            "maximum": 9999,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "channelSubscription": {
+            "description": "provide the subscription status of a SXM channel\n\nFree to air (FTA) = available, subscription plan independence\nsubscribed = available, part of the subscription plan\n\nunsubscribed = available, not part of the subscription plan\n\nunavailable = not part of the channel line up\nupgrade = content is available through a different subscription package than the user’s current subscription",
+            "enum": [
+              "Free to air",
+              "Subscribed",
+              "Unsubscribed",
+              "unavailable",
+              "upgrade"
+            ],
+            "type": "string"
+          },
+          "contextualInfo": {
+            "description": "contextual text for the content (trending, new, etc…)",
+            "type": "string"
+          },
+          "country": {
+            "description": "country name of the station (128 Chars)",
+            "type": "string"
+          },
+          "ecc": {
+            "description": "extended country code; is unique along with the 4 MSB of pi\n\nProperty is JSON undefined if not valid for an element",
+            "maximum": 255,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "fixPS": {
+            "description": "Flag that is set to 'true' if the name of station is frozen.\n\nThe Default for fixPS is FALSE. \nProperty is JSON undefined if not valid for an element",
+            "type": "boolean"
+          },
+          "freqLabel": {
+            "description": "the frequency label of the best frequency (see property 'freq'), is supported only for stations broadcast on DAB or DMB",
+            "type": "string"
+          },
+          "frequency": {
+            "description": "frequency, is the best AF (if AF is enabled); AF:..alternaive frequency",
+            "minimum": 0,
+            "type": "integer",
+            "unit": "kHz"
+          },
+          "geoRestricted": {
+            "description": "indicator that the current playing content for this station cannot be heard due to georestriction.\nProperty will be unbefine if no restriction is available.\n\n_ restrictedLocation: content cannot be stream in the current location ; _ undeterminedLocation: current vehicle location cannot be verified",
+            "enum": [
+              "restrictedLocation",
+              "undeterminedLocation"
+            ],
+            "type": "string"
+          },
+          "images": {
+            "description": "image slide show the newest will be added to the first element.\nlimited to 20 slides\n\nURI to CDN service",
+            "items": {
+              "format": "uri",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "isLocked": {
+            "description": "flag that inicate if a channel is locked / Filtered out, to use e.g. for Parental Lock\ntrue= Locked\nfalse=unlocked\ndefault = false\nJSON Undefine if not valid for an element",
+            "type": "boolean"
+          },
+          "isSmartFavorite": {
+            "description": "Is `undefined` if the feature (SXMSmartFavorite) is not applicable for the station. `True` expresses that a station is marked as a smartFavorite.\ndefault = false\nJSON Undefine if not valid for an element",
+            "type": "boolean"
+          },
+          "isTrafficProgramme": {
+            "description": "indicates if station is a TP station\nisn't TP = FALSE\nis TP = TRUE\ndefault = false\nJSON Undefine if not valid for an element",
+            "type": "boolean"
+          },
+          "language": {
+            "description": "The language the programme is broadcast in. Set to JSON-undefined if language is unknown.",
+            "format": "language",
+            "type": "string"
+          },
+          "lastListend": {
+            "description": "a UTC time stamp that allowed to get the last tuned station",
+            "format": "date-time",
+            "type": "string"
+          },
+          "logoOverDark": {
+            "description": "stationLogo over dark background, SAT Radio only\nif not available, property is JSON undefine\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "logoOverLight": {
+            "description": "stationLogo over light background, SAT Radio only\n\nif not available, property is JSON undefine\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "logoRecommendationPreferred": {
+            "description": "a station logo that will recommended by the service or define by the client (UserDefined Logo)\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "logos": {
+            "description": "station logo images, the first element is used as preview logo\n\nURI to CDN service",
+            "items": {
+              "format": "uri",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "maxBufferTime": {
+            "description": "provide the maximum buffer capacity time of the staton/stream",
+            "minimum": 0,
+            "resolution": 1000,
+            "type": "integer",
+            "unit": "ms"
+          },
+          "mixable": {
+            "description": "Set to 'true' if station can be added to SXM (SDARS) tuneMixes collection. Set to JSON-undefined in case of a non SDARS station.",
+            "type": "boolean"
+          },
+          "nameLong": {
+            "description": "long name of station (SDARS,DAB,FM 56chars) and podcast",
+            "type": "string"
+          },
+          "nameMedium": {
+            "description": "medium long name of station (SDARS  and Podcast,  10chars)",
+            "type": "string"
+          },
+          "nameShort": {
+            "description": "name of station (up to 8 chars).",
+            "type": "string"
+          },
+          "onlineLinkingStatus": {
+            "description": "Indicator of availability of another audio stream for this content\nsupported = content has alternate stream available\nunsupported = content does not have alternate stream available\nlinkingInQuery = service requesting stream change\nlinkingAccepted = client has accepted stream change",
+            "enum": [
+              "supported",
+              "unsupported",
+              "linkingInQuery",
+              "linkingAccepted"
+            ],
+            "type": "string"
+          },
+          "phonetics": {
+            "description": "Array of references to phonetic data for voice control (SDS) of this station.",
+            "oneOf": [
+              {
+                "#ref": "phonemecontentnetwork.phonemes.phonemeObject"
+              }
+            ],
+            "type": "object"
+          },
+          "pi": {
+            "description": "programme identification code",
+            "type": "integer"
+          },
+          "podcast": {
+            "description": "The flag identify a station as a podcast. For none web radio based station property is undefine.",
+            "type": "boolean"
+          },
+          "programType": {
+            "description": "description of the current playing program\n\nis undefine if not supported. is empty string if supported and not information available.",
+            "type": "string"
+          },
+          "programmeDescriptionLong": {
+            "description": "Contains a programme description with up to 2048 chars, supported for SDARS, IBOC station long name and service display name. Also to use for description of episode.",
+            "type": "string"
+          },
+          "programmeDescriptionShort": {
+            "description": "Contains a programme description with up to 36chars, at the moment supported for SDARS only.",
+            "type": "string"
+          },
+          "providerLogo": {
+            "description": "provide the content provider image e.g. WebRadio\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "qualityType": {
+            "description": "Quality type of (internet) streams\n>= 192kb/s == High\n>=128 kb/s == medium\n<128 kb/s == low",
+            "enum": [
+              "High",
+              "Medium",
+              "Low"
+            ],
+            "type": "string"
+          },
+          "radiotext": {
+            "description": "Radio text of the current tuned station.",
+            "type": "string"
+          },
+          "receptionQuality": {
+            "description": "defines reception quality of this station",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer",
+            "unit": "percent"
+          },
+          "region": {
+            "description": "region of the station (128 chars) I18N localized text",
+            "type": "string"
+          },
+          "regionalProgrammeCode": {
+            "description": "Station is a regional station. If the station is regionalized, the value is providing the regional code. If the station is currently not regionalized, the value is empty. If a band is not supporting regional, the Property is undefined.",
+            "type": "integer"
+          },
+          "relatedAudiosegments": {
+            "description": "array of audiosegment of the station e.g. to represent episodes of a podcast station",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.audiosegments.audiosegmentObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "relatedShows": {
+            "description": "array of shows with similar content",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.stations.stationObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "relatedStations": {
+            "description": "stations with similiar content",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.stations.stationObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "serviceId": {
+            "description": "service id for IBOC\n\nThe number of the sub station e.g. HD2, HD3 \n\nIf non HD station property is JSON Undefine",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "stationBackground": {
+            "description": "provide the station related background image\n\nURI to CDN service",
+            "format": "uri",
+            "type": "string"
+          },
+          "stationRanking": {
+            "description": "a integater value to provide the ranking of a station \n\ne.g. for WEB Radio Top100",
+            "minimum": 1,
+            "resolution": 1,
+            "type": "integer"
+          },
+          "streamingServer": {
+            "description": "Contains the URI of the best (internet) streaming server (URI to audio signal source).",
+            "format": "uri",
+            "type": "string"
+          },
+          "substations": {
+            "description": "sub station of digital radio station (DAB or IBOC).Or Station family in Web Radio.",
+            "items": {
+              "oneOf": [
+                {
+                  "#ref": "radio.stations.stationObject"
+                }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "virtualStation": {
+            "description": "deprecated: property will not longer used\n\na station there the user cannot tune to can be reference to an other object or present other information.",
+            "type": "boolean"
+          }
+        }
+      },
+      "endpoints": {
+        "element": {
+          "get": {},
+          "post": {
+            "parameters": {
+              "description": "see model description",
+              "method": "post",
+              "properties": {
+                "fixPS": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "isLocked": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "isSmartFavorite": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "onlineLinkingStatus": {
+                  "description": "see model description",
+                  "enum": [
+                    "supported",
+                    "unsupported",
+                    "linkingInQuery",
+                    "linkingAccepted"
+                  ],
+                  "type": "string"
+                }
+              },
+              "resource": "radio.stations"
+            }
+          }
+        },
+        "resource": {
+          "get": {
+            "parameters": {
+              "description": "The server shall support filtering of GET requests for all combinations of properties listed in the following plus id, name, uri.",
+              "method": "get",
+              "properties": {
+                "audioSegment": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "audioStatus": {
+                  "description": "see model description",
+                  "enum": [
+                    "analogue",
+                    "digital",
+                    "muted",
+                    "ballGameMode",
+                    "online"
+                  ],
+                  "type": "string"
+                },
+                "bands": {
+                  "description": "see data model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "category": {
+                  "description": "see data model",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "channelNumber": {
+                  "description": "see model description",
+                  "maximum": 9999,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "channelSubscription": {
+                  "description": "see model description",
+                  "enum": [
+                    "Free to air",
+                    "Subscribed",
+                    "Unsubscribed",
+                    "unavailable",
+                    "upgrade"
+                  ],
+                  "type": "string"
+                },
+                "contextualInfo": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "ecc": {
+                  "description": "see data model",
+                  "maximum": 255,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "freqLabel": {
+                  "description": "see data model description",
+                  "type": "string"
+                },
+                "geoRestricted": {
+                  "description": "see model description",
+                  "enum": [
+                    "restrictedLocation",
+                    "undeterminedLocation"
+                  ],
+                  "type": "string"
+                },
+                "isLocked": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "isSmartFavorite": {
+                  "description": "see data model",
+                  "type": "boolean"
+                },
+                "isTrafficProgramme": {
+                  "description": "see data model",
+                  "type": "boolean"
+                },
+                "language": {
+                  "description": "see data model",
+                  "format": "language",
+                  "type": "string"
+                },
+                "lastListend": {
+                  "description": "see model description",
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "logoOverDark": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "logoOverLight": {
+                  "description": "see model description",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "mixable": {
+                  "description": "see data model",
+                  "type": "boolean"
+                },
+                "name": {
+                  "description": "see data model description",
+                  "type": "string"
+                },
+                "nameLong": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "nameMedium": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "nameShort": {
+                  "description": "see model description",
+                  "type": "string"
+                },
+                "onlineLinkingStatus": {
+                  "description": "see model description",
+                  "enum": [
+                    "supported",
+                    "unsupported",
+                    "linkingInQuery",
+                    "linkingAccepted"
+                  ],
+                  "type": "string"
+                },
+                "pi": {
+                  "description": "see data model",
+                  "type": "integer"
+                },
+                "podcast": {
+                  "description": "see model description",
+                  "type": "boolean"
+                },
+                "qualityType": {
+                  "description": "see model description",
+                  "enum": [
+                    "High",
+                    "Medium",
+                    "Low"
+                  ],
+                  "type": "string"
+                },
+                "receptionQuality": {
+                  "description": "see model description",
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "integer",
+                  "unit": "percent"
+                },
+                "relatedAudiosegments": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "relatedShows": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "relatedStations": {
+                  "description": "see model description",
+                  "items": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "stationRanking": {
+                  "description": "see model description",
+                  "minimum": 1,
+                  "resolution": 1,
+                  "type": "integer"
+                },
+                "streamingServer": {
+                  "description": "see data model",
+                  "format": "uri",
+                  "type": "string"
+                },
+                "virtualStation": {
+                  "description": "see model description",
+                  "type": "boolean"
+                }
+              },
+              "resource": "radio.stations"
+            }
+          }
+        }
+      },
+      "systemTriggeredEvents": [
+        "element",
+        "resource"
+      ]
+    }
+  }
+}
